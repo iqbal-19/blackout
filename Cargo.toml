@@ -10,3 +10,4 @@ crate-type = ["cdylib"]
 [dependencies]
 worker = "0.8"
 worker-macros = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
