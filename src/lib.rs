@@ -6,5 +6,5 @@ async fn fetch(
     _env: Env,
     _ctx: Context,
 ) -> Result<Response> {
-    Response::ok("Hello World!")
+    Response::ok("Rust OK")
 }
