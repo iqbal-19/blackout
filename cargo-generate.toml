@@ -1,4 +1,0 @@
-[placeholders]
-panic_unwind = { prompt = "Enable panic=unwind and abort recovery?", default = false, type = "bool" }
-
-[template]
