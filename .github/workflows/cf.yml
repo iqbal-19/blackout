@@ -2,19 +2,29 @@ name: Deploy Cloudflare Worker
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/cache@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cargo
             ~/.rustup
             target
           key: cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
