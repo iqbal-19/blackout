@@ -2,7 +2,7 @@ name = "blackout"
 
 main = "build/index.js"
 
-compatibility_date = "2026-06-29"
+compatibility_date = "2026-06-28"
 
 [build]
 command = "cargo install -q \"worker-build@^0.8\" && worker-build --release"
