@@ -21,10 +21,12 @@ async fn fetch(
         &env.var("UUID")?.to_string()
     ).unwrap();
 
+    let host = req.url()?.host().unwrap_or_default().to_string();
+    
     let config = Config {
         uuid,
-        host: req.url()?.host().unwrap_or_default().to_string(),
-        proxy_addr: req.url()?.host().unwrap_or_default().to_string(),
+        host: host.clone(),
+        proxy_addr: host,
         proxy_port: 443,
         main_page_url: env.var("MAIN_PAGE_URL")?.to_string(),
         sub_page_url: env.var("SUB_PAGE_URL")?.to_string(),
