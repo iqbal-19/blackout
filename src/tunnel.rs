@@ -1,5 +1,14 @@
+use once_cell::sync::Lazy;
+use regex::Regex;
+use std::collections::HashMap;
 use worker::*;
 use crate::config::Config;
+
+static PROXYIP_PATTERN: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^.+-\d+$").unwrap());
+
+static PROXYKV_PATTERN: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^([A-Z]{2})").unwrap());
 
 pub async fn handle(
     req: Request,
@@ -47,6 +56,52 @@ pub async fn handle(
 
     }
 
-    Response::ok(format!("Tunnel Ready : {}", proxyip))
+    if PROXYKV_PATTERN.is_match(&proxyip) {
+    
+        let kv = cx.kv("SIREN")?;
+    
+        let mut proxy_kv_str = kv
+            .get("proxy_kv")
+            .text()
+            .await?
+            .unwrap_or_default();
+    
+        if proxy_kv_str.is_empty() {
+    
+            let req = Fetch::Url(
+                Url::parse("https://raw.githubusercontent.com/FoolVPN-ID/Nautica/refs/heads/main/kvProxyList.json")?
+            );
+    
+            let mut res = req.send().await?;
+    
+            if res.status_code() == 200 {
+    
+                proxy_kv_str = res.text().await?;
+    
+                kv.put("proxy_kv", &proxy_kv_str)?
+                    .expiration_ttl(60 * 60 * 24)
+                    .execute()
+                    .await?;
+    
+            }
+    
+        }
+    
+        let proxy_kv: HashMap<String, Vec<String>> =
+            serde_json::from_str(&proxy_kv_str)?;
+    
+        if let Some(list) = proxy_kv.get(&proxyip) {
+    
+            if let Some(first) = list.first() {
+    
+                proxyip = first.replace(":", "-");
+    
+            }
+    
+        }
+    
+    }
+    
+    Response::ok(format!("Proxy : {}", proxyip))
 
 }
