@@ -64,12 +64,15 @@ impl<'a> ProxyStream<'a> {
     }
 
     pub async fn process(&mut self) -> Result<()> {
-        let peek_buffer_len = 62;
+        let peek_buffer_len = 128;
         self.fill_buffer_until(peek_buffer_len).await?;
         let peeked_buffer = self.peek_buffer(peek_buffer_len);
 
-        if peeked_buffer.len() < (peek_buffer_len/2) {
-            return Err(Error::RustError("not enough buffer".to_string()));
+        if peeked_buffer.len() < 24 {
+            return Err(Error::RustError(format!(
+                "not enough buffer {}",
+                peeked_buffer.len()
+            )));
         }
 
         if self.is_vless(peeked_buffer) {
