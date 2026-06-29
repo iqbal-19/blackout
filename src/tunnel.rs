@@ -1,3 +1,4 @@
+use getrandom::getrandom;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::collections::HashMap;
@@ -91,13 +92,18 @@ pub async fn handle(
             serde_json::from_str(&proxy_kv_str)?;
     
         if let Some(list) = proxy_kv.get(&proxyip) {
-    
-            if let Some(first) = list.first() {
-    
-                proxyip = first.replace(":", "-");
-    
-            }
-    
+        
+            let mut rand_buf = [0u8; 1];
+        
+            getrandom(&mut rand_buf)
+                .expect("failed generating random number");
+        
+            let index =
+                (rand_buf[0] as usize) % list.len();
+        
+            proxyip = list[index]
+                .replace(":", "-");
+        
         }
     
     }
