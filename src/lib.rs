@@ -34,7 +34,7 @@ async fn fetch(
         main_page_url: env.var("MAIN_PAGE_URL")?.to_string(),
         sub_page_url: env.var("SUB_PAGE_URL")?.to_string(),
     };
-    return Response::ok("Worker OK");
+    
 
     Router::with_data(config)
         .get_async("/", |req, ctx| async move {
