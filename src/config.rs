@@ -18,14 +18,16 @@ impl Config {
             uuid: Uuid::parse_str(
                 &env.var("UUID")?.to_string()
             ).unwrap(),
-
-            main_page_url: env
-                .var("MAIN_PAGE_URL")?
-                .to_string(),
-
-            sub_page_url: env
-                .var("SUB_PAGE_URL")?
-                .to_string(),
+        
+            host: String::new(),
+        
+            proxy_addr: String::new(),
+        
+            proxy_port: 443,
+        
+            main_page_url: env.var("MAIN_PAGE_URL")?.to_string(),
+        
+            sub_page_url: env.var("SUB_PAGE_URL")?.to_string(),
         })
     }
 }
