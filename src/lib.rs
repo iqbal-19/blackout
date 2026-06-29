@@ -37,6 +37,11 @@ async fn fetch(
         .get_async("/link", |req, ctx| async move {
             router::handle(req, ctx.env).await
         })
+        .on_async("/:proxyip", tunnel)
+        .on_async("/vmess", tunnel)
+        .on_async("/vless", tunnel)
+        .on_async("/trojan", tunnel)
+        .on_async("/shadowsocks", tunnel)
         .run(req, env)
         .await
 }
