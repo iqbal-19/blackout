@@ -1,3 +1,4 @@
+mod link;
 mod common;
 mod config;
 mod proxy;
