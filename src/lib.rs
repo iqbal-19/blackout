@@ -21,11 +21,10 @@ async fn fetch(
         &env.var("UUID")?.to_string()
     ).unwrap();
 
-    let host = req
-        .url()?
-        .host()
-        .map(|h| h.to_string())
-        .unwrap_or_default();
+    let host = match req.url()?.host() {
+        Some(h) => h.to_string(),
+        None => String::new(),
+    };
     
     let config = Config {
         uuid,
