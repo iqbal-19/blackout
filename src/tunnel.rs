@@ -56,7 +56,8 @@ pub async fn handle(
         _ => {}
 
     }
-
+    
+    proxyip = proxyip.to_uppercase();
     if PROXYKV_PATTERN.is_match(&proxyip) {
     
         let kv = cx.kv("SIREN")?;
