@@ -38,11 +38,11 @@ async fn fetch(
         .get_async("/link", |req, ctx| async move {
             router::handle(req, ctx.env).await
         })
-        .on_async("/:proxyip", tunnel)
-        .on_async("/vmess", tunnel)
-        .on_async("/vless", tunnel)
-        .on_async("/trojan", tunnel)
-        .on_async("/shadowsocks", tunnel)
+        .on_async("/:proxyip", tunnel::handle)
+        .on_async("/vmess", tunnel::handle)
+        .on_async("/vless", tunnel::handle)
+        .on_async("/trojan", tunnel::handle)
+        .on_async("/shadowsocks", tunnel::handle)
         .run(req, env)
         .await
 }
