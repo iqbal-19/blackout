@@ -45,3 +45,12 @@ async fn fetch(
         .run(req, env)
         .await
 }
+
+async fn tunnel(
+    _req: Request,
+    _ctx: RouteContext<Config>,
+) -> Result<Response> {
+
+    Response::ok("Tunnel OK")
+
+}
