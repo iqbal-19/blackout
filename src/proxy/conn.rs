@@ -160,7 +160,7 @@ impl<'a> ProxyStream<'a> {
 
         let n = self.read(&mut buff).await?;
         let data = &buff[..n];
-        if crate::dns::doh(data).await.is_ok() {
+        if crate::proxy::dns::doh(data).await.is_ok() {
             self.write(&data).await?;
         };
         Ok(())
