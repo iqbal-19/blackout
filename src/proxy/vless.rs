@@ -26,6 +26,11 @@ impl <'a> ProxyStream<'a> {
         // read port and address
         let remote_port = parse_port(self).await?;
         let remote_addr = parse_addr(self).await?;
+        console_log!(
+            "Target => {}:{}",
+            remote_addr,
+            remote_port
+        );
 
         if is_tcp {
             let addr_pool = [
