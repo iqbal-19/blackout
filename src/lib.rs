@@ -2,6 +2,7 @@ mod common;
 mod config;
 mod proxy;
 mod router;
+mod tunnel;
 
 use config::Config;
 use uuid::Uuid;
