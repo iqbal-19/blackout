@@ -1,8 +1,10 @@
 mod common;
 mod config;
-mod router;
 mod proxy;
+mod router;
 
+use config::Config;
+use uuid::Uuid;
 use worker::*;
 
 #[event(fetch)]
@@ -12,6 +14,29 @@ async fn fetch(
     _ctx: Context,
 ) -> Result<Response> {
 
-    router::handle(req, env).await
+    let uuid = Uuid::parse_str(
+        &env.var("UUID")?.to_string()
+    ).unwrap();
 
+    let config = Config {
+        uuid,
+        host: String::new(),
+        proxy_addr: String::new(),
+        proxy_port: 443,
+        main_page_url: env.var("MAIN_PAGE_URL")?.to_string(),
+        sub_page_url: env.var("SUB_PAGE_URL")?.to_string(),
+    };
+
+    Router::with_data(config)
+        .get_async("/", |req, ctx| async move {
+            router::handle(req, ctx.env).await
+        })
+        .get_async("/sub", |req, ctx| async move {
+            router::handle(req, ctx.env).await
+        })
+        .get_async("/link", |req, ctx| async move {
+            router::handle(req, ctx.env).await
+        })
+        .run(req, env)
+        .await
 }
