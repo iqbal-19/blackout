@@ -21,7 +21,7 @@ async fn fetch(
         &env.var("UUID")?.to_string()
     ).unwrap();
 
-    let host = req.url()?.host().unwrap_or_default().to_string();
+    let host = req.url()?.host().to_string();
     
     let config = Config {
         uuid,
