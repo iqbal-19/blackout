@@ -36,9 +36,7 @@ async fn fetch(
         .get_async("/sub", |req, ctx| async move {
             router::handle(req, ctx.env).await
         })
-        .get_async("/link", |req, ctx| async move {
-            router::handle(req, ctx.env).await
-        })
+        .on_async("/link", link::handle)
         .on_async("/:proxyip", tunnel::handle)
         .on_async("/vmess", tunnel::handle)
         .on_async("/vless", tunnel::handle)
