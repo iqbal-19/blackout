@@ -19,7 +19,7 @@ async fn fetch(
 
     let uuid = Uuid::parse_str(
         &env.var("UUID")?.to_string()
-    ).unwrap();
+    ).unwrap_or_default();
 
     let host = match req.url()?.host() {
         Some(h) => h.to_string(),
@@ -34,6 +34,7 @@ async fn fetch(
         main_page_url: env.var("MAIN_PAGE_URL")?.to_string(),
         sub_page_url: env.var("SUB_PAGE_URL")?.to_string(),
     };
+    return Response::ok("Worker OK");
 
     Router::with_data(config)
         .get_async("/", |req, ctx| async move {
