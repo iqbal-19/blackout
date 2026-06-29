@@ -152,6 +152,7 @@ pub async fn handle(
     
     // jalankan ProxyStream di background
     wasm_bindgen_futures::spawn_local(async move {
+        console_log!("ProxyStream started");
         let events = server.events().unwrap();
     
         if let Err(e) = ProxyStream::new(
@@ -162,7 +163,7 @@ pub async fn handle(
         .process()
         .await
         {
-            console_error!("[tunnel] {}", e);
+            console_error!("ProxyStream error: {}", e);
         }
     });
     
