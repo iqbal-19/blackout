@@ -23,8 +23,8 @@ async fn fetch(
 
     let config = Config {
         uuid,
-        host: String::new(),
-        proxy_addr: String::new(),
+        host: req.url()?.host().unwrap_or_default().to_string(),
+        proxy_addr: req.url()?.host().unwrap_or_default().to_string(),
         proxy_port: 443,
         main_page_url: env.var("MAIN_PAGE_URL")?.to_string(),
         sub_page_url: env.var("SUB_PAGE_URL")?.to_string(),
