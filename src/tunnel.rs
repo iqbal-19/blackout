@@ -108,6 +108,46 @@ pub async fn handle(
     
     }
     
-    Response::ok(format!("Proxy : {}", proxyip))
+    let upgrade =
+        req.headers()
+            .get("Upgrade")?
+            .unwrap_or_default();
+    
+    if upgrade.to_lowercase() != "websocket" {
+    
+        return Response::ok(
+            format!("Proxy : {}", proxyip)
+        );
+    
+    }
+    
+    if !PROXYIP_PATTERN.is_match(&proxyip) {
+    
+        return Response::error(
+            "Invalid Proxy",
+            400,
+        );
+    
+    }
+    
+    if let Some((addr, port)) = proxyip.split_once('-') {
+    
+        cx.data.proxy_addr = addr.to_string();
+    
+        cx.data.proxy_port = port.parse().unwrap_or(443);
+    
+    }
+    
+    let WebSocketPair {
+    
+        server,
+    
+        client,
+    
+    } = WebSocketPair::new()?;
+    
+    server.accept()?;
+    
+    Response::from_websocket(client)
 
 }
