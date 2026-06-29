@@ -4,6 +4,7 @@ use regex::Regex;
 use std::collections::HashMap;
 use worker::*;
 use crate::config::Config;
+use crate::proxy::ProxyStream;
 
 static PROXYIP_PATTERN: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^.+-\d+$").unwrap());
