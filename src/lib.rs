@@ -1,5 +1,6 @@
 mod config;
 mod router;
+mod proxy;
 
 use worker::*;
 
