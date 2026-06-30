@@ -148,8 +148,20 @@ pub async fn handle(
     server.accept()?;
     
     // jalankan ProxyStream di background
-    server.send_with_str("HELLO BLACKOUT")?;
+    wasm_bindgen_futures::spawn_local(async move {
+        let events = server.events().unwrap();
+    
+        if let Err(e) = ProxyStream::new(
+            cx.data,
+            &server,
+            events,
+        )
+        .process()
+        .await
+        {
+            console_error!("ProxyStream error: {}", e);
+        }
+    });
     
     Response::from_websocket(client)
-
 }
