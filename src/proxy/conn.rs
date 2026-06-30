@@ -64,31 +64,56 @@ impl<'a> ProxyStream<'a> {
     }
 
     pub async fn process(&mut self) -> Result<()> {
+    
+        self.ws.send_with_str("STEP 1").ok();
+    
         let peek_buffer_len = 128;
+    
         self.fill_buffer_until(peek_buffer_len).await?;
+    
+        self.ws.send_with_str("STEP 2").ok();
+    
         let peeked_buffer = self.peek_buffer(peek_buffer_len);
-
+    
+        self.ws.send_with_str("STEP 3").ok();
+    
         if peeked_buffer.len() < 24 {
             return Err(Error::RustError(format!(
                 "not enough buffer {}",
                 peeked_buffer.len()
             )));
         }
-
+    
+        self.ws.send_with_str("STEP 4").ok();
+    
         if self.is_vless(peeked_buffer) {
-            console_log!("vless detected!");
+    
+            self.ws.send_with_str("STEP VLESS").ok();
+    
             self.process_vless().await
+    
         } else if self.is_shadowsocks(peeked_buffer) {
-            console_log!("shadowsocks detected!");
+    
+            self.ws.send_with_str("STEP SS").ok();
+    
             self.process_shadowsocks().await
+    
         } else if self.is_trojan(peeked_buffer) {
-            console_log!("trojan detected!");
+    
+            self.ws.send_with_str("STEP TROJAN").ok();
+    
             self.process_trojan().await
+    
         } else if self.is_vmess(peeked_buffer) {
-            console_log!("vmess detected!");
+    
+            self.ws.send_with_str("STEP VMESS").ok();
+    
             self.process_vmess().await
+    
         } else {
+    
             Err(Error::RustError("protocol not implemented".to_string()))
+    
         }
     }
 
