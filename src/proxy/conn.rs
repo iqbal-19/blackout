@@ -139,9 +139,12 @@ impl<'a> ProxyStream<'a> {
     }
 
     pub async fn handle_tcp_outbound(&mut self, addr: String, port: u16) -> Result<()> {
-        let mut remote_socket = Socket::builder().connect(&addr, port).map_err(|e| {
-            Error::RustError(e.to_string())
-        })?;
+        let mut remote_socket = Socket::builder()
+            .secure_transport(SecureTransport::On)
+            .connect(&addr, port)
+            .map_err(|e| {
+                Error::RustError(e.to_string())
+            })?;
 
         remote_socket.opened().await.map_err(|e| {
             Error::RustError(e.to_string())
