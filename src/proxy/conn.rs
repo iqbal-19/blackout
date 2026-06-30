@@ -99,8 +99,12 @@ impl<'a> ProxyStream<'a> {
         self.ws.send_with_str("STEP 1").ok();
     
         let peek_buffer_len = 128;
-    
+        
+        self.ws.send_with_str("BEFORE READ").ok();
+        
         self.fill_buffer_until(peek_buffer_len).await?;
+        
+        self.ws.send_with_str("AFTER READ").ok();
     
         self.ws.send_with_str("STEP 2").ok();
     
