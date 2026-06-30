@@ -110,15 +110,13 @@ pub async fn handle(
     
     }
     
-    let upgrade =
-        req.headers()
-            .get("Upgrade")?
-            .unwrap_or_default();
+    let upgrade = req.headers()
+        .get("Upgrade")?
+        .unwrap_or_default();
     
-    return Response::ok(format!(
-        "Upgrade={}",
-        upgrade
-    ));
+    if upgrade.to_lowercase() != "websocket" {
+        return Response::ok("NOT WEBSOCKET");
+    }
     
     
     
