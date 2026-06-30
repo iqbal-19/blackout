@@ -8,10 +8,10 @@ compatibility_date = "2026-06-28"
 command = "cargo install -q \"worker-build@^0.8\" && worker-build --release"
 
 [vars]
-UUID = "8709811d-1cbd-44ec-94b1-bda5b00af788"
+UUID = "23393f52-4ca9-4f0a-925d-84c8b652c6cf"
 MAIN_PAGE_URL = "https://raw.githubusercontent.com/iqbal-19/mybabi/refs/heads/main/web/index.html"
 SUB_PAGE_URL = "https://raw.githubusercontent.com/iqbal-19/mybabi/refs/heads/main/web/sub.html"
 
 [[kv_namespaces]]
 binding = "SIREN"
-id = "f62e67e447f04c56b217bb96bc8de470"
+id = "2da1f3cc37f745d8af7cc0d8ac6c87a8"
