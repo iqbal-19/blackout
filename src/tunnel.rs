@@ -115,11 +115,10 @@ pub async fn handle(
             .get("Upgrade")?
             .unwrap_or_default();
     
-    if upgrade.to_lowercase() != "websocket" {
-    
-        return Response::ok(
-            format!("Proxy : {}", proxyip)
-        );
+    return Response::ok(format!(
+        "Upgrade={}",
+        upgrade
+    ));
     
     }
     
