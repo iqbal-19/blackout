@@ -38,21 +38,46 @@ impl<'a> ProxyStream<'a> {
         use futures_util::StreamExt;
 
         while self.buffer.len() < n {
+        
+            self.ws.send_with_str("WAIT EVENT").ok();
+        
             match self.events.next().await {
+        
                 Some(Ok(WebsocketEvent::Message(msg))) => {
+        
+                    self.ws.send_with_str("MESSAGE").ok();
+        
                     if let Some(data) = msg.bytes() {
+        
+                        self.ws.send_with_str(
+                            &format!("LEN={}", data.len())
+                        ).ok();
+        
                         self.buffer.put_slice(&data);
                     }
                 }
+        
                 Some(Ok(WebsocketEvent::Close(_))) => {
+        
+                    self.ws.send_with_str("CLOSE").ok();
+        
                     break;
                 }
-                Some(Err(e)) => {
-                    return Err(std::io::Error::new(std::io::ErrorKind::Other, e.to_string()));
+        
+                Some(Err(_)) => {
+        
+                    self.ws.send_with_str("EVENT ERROR").ok();
+        
+                    return Err(std::io::Error::other("event"));
                 }
+        
                 None => {
+        
+                    self.ws.send_with_str("NONE").ok();
+        
                     break;
                 }
+        
             }
         }
         Ok(())
