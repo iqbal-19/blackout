@@ -44,15 +44,21 @@ impl<'a> ProxyStream<'a> {
             match self.events.next().await {
         
                 Some(Ok(WebsocketEvent::Message(msg))) => {
-        
+                
                     self.ws.send_with_str("MESSAGE").ok();
-        
+                
                     if let Some(data) = msg.bytes() {
-        
+                
                         self.ws.send_with_str(
                             &format!("LEN={}", data.len())
                         ).ok();
-        
+                
+                        if !data.is_empty() {
+                            self.ws.send_with_str(
+                                &format!("FIRST={:02X}", data[0])
+                            ).ok();
+                        }
+                
                         self.buffer.put_slice(&data);
                     }
                 }
