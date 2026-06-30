@@ -154,13 +154,7 @@ pub async fn handle(
         console_log!("ProxyStream started");
         let events = server.events().unwrap();
     
-        if let Err(e) = ProxyStream::new(
-            cx.data,
-            &server,
-            events,
-        )
-        .process()
-        .await
+        server.send_with_str("HELLO BLACKOUT").ok();
         {
             console_error!("ProxyStream error: {}", e);
         }
