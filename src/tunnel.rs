@@ -120,7 +120,7 @@ pub async fn handle(
         upgrade
     ));
     
-    }
+    
     
     if !PROXYIP_PATTERN.is_match(&proxyip) {
     
